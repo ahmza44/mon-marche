@@ -17,15 +17,26 @@ public function callback()
 {
     $googleUser = Socialite::driver('google')->stateless()->user();
 
-    $customer = Customer::updateOrCreate(
-        ['email' => $googleUser->email],
-        [
+    $customer = Customer::where('email', $googleUser->email)->first();
+
+    if (!$customer) {
+        // 🔥 user جديد فقط
+        $customer = Customer::create([
             'name' => $googleUser->name,
+            'email' => $googleUser->email,
             'google_id' => $googleUser->id,
             'avatar' => $googleUser->avatar,
-            'password' => null, // مهم بزاف
-        ]
-    );
+            'password' => null,
+            'email_verified_at' => now(),
+        ]);
+    } else {
+        // 🔥 user موجود → ما نبدلو حتى حاجة من DB
+        // غير نربطو google_id إذا كان ناقص
+        if (!$customer->google_id) {
+            $customer->google_id = $googleUser->id;
+            $customer->save();
+        }
+    }
 
     Auth::guard('customer')->login($customer);
 

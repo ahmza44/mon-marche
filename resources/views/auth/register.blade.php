@@ -2,158 +2,95 @@
 
 @section('content')
 
+<style>
+    .card-auth{
+        background: #fff;
+        border: 1px solid #f3f4f6;
+        box-shadow: 0 20px 60px rgba(0,0,0,.08);
+        border-radius: 24px;
+    }
+
+    .input{
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1.5px solid #e5e7eb;
+        background: #fafafa;
+        font-size: 14px;
+        outline: none;
+        transition: .2s;
+    }
+
+    .input:focus{
+        border-color: #ff7a00;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(255,122,0,.12);
+    }
+
+    .btn{
+        width: 100%;
+        padding: 12px;
+        border-radius: 14px;
+        background: linear-gradient(135deg,#ff7a00,#ff9a35);
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .btn:hover{
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(255,122,0,.25);
+    }
+
+    .title{
+        font-size: 22px;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .subtitle{
+        font-size: 13px;
+        color: #6b7280;
+    }
+</style>
+
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-100 px-4">
 
-    <div 
-        x-data="{ show1: false, show2: false, loading: false }"
-        class="w-full max-w-lg bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-orange-100 p-8 transition-all duration-500"
-    >
+    <div class="w-full max-w-md card-auth p-8">
 
-        {{-- LOGO --}}
-        <div class="text-center mb-8">
-            <div class="mx-auto w-16 h-16 mb-4 rounded-2xl overflow-hidden shadow-md border border-orange-100">
-                <img src="{{ asset('storage/logo/logo.png') }}"
-                     class="w-full h-full object-contain">
-            </div>
-
-            <h2 class="text-3xl font-extrabold text-gray-900">
-                Créer un compte ✨
-            </h2>
-
-            <p class="text-sm text-gray-500 mt-2">
-                Inscription rapide et sécurisée
-            </p>
+        {{-- TITLE --}}
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-extrabold text-gray-900">
+    Mon <span class="text-orange-500">Marché</span>
+</h1>>
+            <p class="subtitle">Créer un nouveau compte</p>
         </div>
 
         {{-- FORM --}}
-        <form method="POST" action="{{ route('register') }}"
-              @submit="loading = true"
-              class="space-y-5">
+        <form method="POST" action="{{ route('register') }}" class="space-y-4">
             @csrf
 
-            {{-- NAME --}}
-            <div>
-                <label class="text-sm font-medium text-gray-700">Nom</label>
-                <input type="text" name="name" required
-                       value="{{ old('name') }}"
-                       class="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200
-                              focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                       placeholder="Votre nom">
-                @error('name')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            <input class="input" type="text" name="name" placeholder="Nom" required>
+            <input class="input" type="email" name="email" placeholder="Email" required>
+            <input class="input" type="text" name="phone" placeholder="Téléphone">
+            <input class="input" type="password" name="password" placeholder="Mot de passe" required>
+            <input class="input" type="password" name="password_confirmation" placeholder="Confirmer" required>
 
-            {{-- EMAIL --}}
-            <div>
-                <label class="text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" required
-                       value="{{ old('email') }}"
-                       class="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200
-                              focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                       placeholder="email@example.com">
-                @error('email')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- PHONE --}}
-            <div>
-                <label class="text-sm font-medium text-gray-700">Téléphone</label>
-                <input type="text" name="phone"
-                       value="{{ old('phone') }}"
-                       class="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200
-                              focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                       placeholder="+212...">
-            </div>
-
-            {{-- CITY + ADDRESS --}}
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-sm font-medium text-gray-700">Ville</label>
-                    <input type="text" name="city"
-                           value="{{ old('city') }}"
-                           class="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200
-                                  focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition">
-                </div>
-
-                <div>
-                    <label class="text-sm font-medium text-gray-700">Adresse</label>
-                    <input type="text" name="address"
-                           value="{{ old('address') }}"
-                           class="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200
-                                  focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition">
-                </div>
-            </div>
-
-            {{-- PASSWORD --}}
-            <div class="relative">
-                <label class="text-sm font-medium text-gray-700">Mot de passe</label>
-
-                <input :type="show1 ? 'text' : 'password'"
-                       name="password"
-                       required
-                       class="w-full mt-1 px-4 py-3 pr-12 rounded-xl border border-gray-200
-                              focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                       placeholder="••••••••">
-
-                <button type="button"
-                        @click="show1 = !show1"
-                        class="absolute right-3 top-[38px] text-gray-400 hover:text-orange-500 transition">
-                    <span x-text="show1 ? '🙈' : '👁️'"></span>
-                </button>
-            </div>
-
-            {{-- CONFIRM --}}
-            <div class="relative">
-                <label class="text-sm font-medium text-gray-700">Confirmer mot de passe</label>
-
-                <input :type="show2 ? 'text' : 'password'"
-                       name="password_confirmation"
-                       required
-                       class="w-full mt-1 px-4 py-3 pr-12 rounded-xl border border-gray-200
-                              focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition"
-                       placeholder="••••••••">
-
-                <button type="button"
-                        @click="show2 = !show2"
-                        class="absolute right-3 top-[38px] text-gray-400 hover:text-orange-500 transition">
-                    <span x-text="show2 ? '🙈' : '👁️'"></span>
-                </button>
-            </div>
-
-            {{-- BUTTON --}}
-            <button type="submit"
-                    :disabled="loading"
-                    class="w-full bg-gradient-to-r from-orange-500 to-orange-600
-                           hover:from-orange-600 hover:to-orange-700
-                           text-white font-semibold py-3 rounded-xl transition
-                           flex items-center justify-center gap-2 shadow-lg">
-
-                <svg x-show="loading"
-                     class="w-5 h-5 animate-spin"
-                     fill="none" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10"
-                            stroke="currentColor" stroke-width="4"
-                            class="opacity-25"/>
-                    <path fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8H4z"
-                          class="opacity-75"/>
-                </svg>
-
-                <span x-text="loading ? 'Création...' : 'Créer un compte'"></span>
+            <button class="btn" type="submit">
+                Créer compte
             </button>
-
         </form>
 
-        {{-- LOGIN --}}
-        <div class="mt-6 text-center text-sm text-gray-500">
+        {{-- LOGIN LINK --}}
+        <p class="text-center text-sm mt-5 text-gray-500">
             Déjà un compte ?
-            <a href="{{ route('login') }}"
-               class="text-orange-500 font-semibold hover:underline">
-                Se connecter
+            <a href="{{ route('login') }}" class="text-orange-500 font-semibold hover:underline">
+                Connexion
             </a>
-        </div>
+        </p>
 
     </div>
 

@@ -27,7 +27,7 @@
         @endif
 
         {{-- QUICK ADD BUTTON (hover only) --}}
-        <form action="{{ route('customer.cart.add', $product->id) }}" method="POST"
+        <form action="{{ route('shop.cart.add', $product->id) }}" method="POST"
               class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition">
             @csrf
             <button type="submit"

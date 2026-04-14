@@ -1,11 +1,14 @@
-<section class="space-y-6">
+<section class="max-w-2xl mx-auto bg-white border border-gray-100 shadow-xl rounded-2xl p-6 space-y-6">
 
-    <header>
-        
-        <p class="text-sm text-gray-600">
-            Ensure your account is using a strong password.
+    <!-- HEADER -->
+    <div class="border-b pb-3">
+        <h2 class="text-xl font-bold text-black">
+            Sécurité du compte
+        </h2>
+        <p class="text-sm text-gray-500">
+            Assure-toi que ton mot de passe est sécurisé
         </p>
-    </header>
+    </div>
 
     <form method="POST" action="{{ route('password.update') }}" class="space-y-5">
         @csrf
@@ -13,10 +16,11 @@
 
         <!-- Current Password -->
         <div>
-            <label class="block text-sm font-medium">Current Password</label>
+            <label class="block text-sm font-medium text-black">Current Password</label>
             <input type="password"
                    name="current_password"
-                   class="w-full mt-1 border rounded-lg p-2 focus:ring focus:ring-red-300"
+                   class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl 
+                          focus:outline-none focus:ring-2 focus:ring-orange-500"
                    autocomplete="current-password">
 
             @error('current_password')
@@ -26,10 +30,11 @@
 
         <!-- New Password -->
         <div>
-            <label class="block text-sm font-medium">New Password</label>
+            <label class="block text-sm font-medium text-black">New Password</label>
             <input type="password"
                    name="password"
-                   class="w-full mt-1 border rounded-lg p-2 focus:ring focus:ring-red-300"
+                   class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl 
+                          focus:outline-none focus:ring-2 focus:ring-orange-500"
                    autocomplete="new-password">
 
             @error('password')
@@ -39,29 +44,28 @@
 
         <!-- Confirm Password -->
         <div>
-            <label class="block text-sm font-medium">Confirm Password</label>
+            <label class="block text-sm font-medium text-black">Confirm Password</label>
             <input type="password"
                    name="password_confirmation"
-                   class="w-full mt-1 border rounded-lg p-2 focus:ring focus:ring-red-300"
+                   class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl 
+                          focus:outline-none focus:ring-2 focus:ring-orange-500"
                    autocomplete="new-password">
-
-            @error('password_confirmation')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
         </div>
 
-        <!-- Submit -->
-        <div class="flex items-center gap-4">
+        <!-- ACTIONS -->
+        <div class="flex items-center justify-between pt-4">
+
             <button type="submit"
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
-                Save
+                    class="bg-orange-500 hover:bg-orange-600 text-black font-semibold px-6 py-2 rounded-xl transition">
+                Update Password
             </button>
 
             @if (session('status') === 'password-updated')
-                <span class="text-green-600 text-sm">
-                    ✔ Saved successfully
+                <span class="text-green-600 text-sm font-medium">
+                    ✔ Updated successfully
                 </span>
             @endif
+
         </div>
 
     </form>

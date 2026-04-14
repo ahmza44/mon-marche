@@ -1,104 +1,92 @@
-<section class="space-y-6">
+<section class="max-w-3xl mx-auto space-y-8">
 
-    <header>
-        <p class="text-sm text-gray-600">
-            Update your account information and email address.
+    {{-- SUCCESS MESSAGE --}}
+    @if(session('success'))
+        <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg">
+            ✔ {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- HEADER --}}
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-xl font-bold text-black">
+            Profile Settings
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+            Update your account information and avatar
         </p>
-    </header>
+    </div>
 
-    <!-- Send verification -->
-    <form id="send-verification" method="POST" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
-    <!-- UPDATE PROFILE -->
+    {{-- FORM --}}
     <form method="POST"
           action="{{ route('profile.update') }}"
           enctype="multipart/form-data"
-          class="space-y-5">
+          class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
 
         @csrf
         @method('PATCH')
 
-        <!-- AVATAR -->
-        <div>
-            <label class="block text-sm font-medium">Avatar</label>
+        {{-- AVATAR --}}
+        <div class="flex items-center gap-6">
 
-            <input type="file"
-                   name="avatar"
-                   class="w-full mt-1 border rounded-lg p-2 focus:ring focus:ring-red-300">
+          @php
+    $user = auth('customer')->user();
+@endphp
 
-            <!-- preview -->
-           <div class="mt-3">
-    <img src="{{ auth()->user()->avatar 
-        ? asset('storage/'.auth()->user()->avatar)
+<img src="{{ $user && $user->avatar
+        ? (str_starts_with($user->avatar, 'http')
+            ? $user->avatar
+            : asset('storage/' . $user->avatar))
         : asset('storage/avatars/default.png') }}"
-        class="w-10 h-10 rounded-full object-cover">
-</div>
-                
+     class="w-16 h-16 rounded-full object-cover border-2 border-orange-500">
+
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-black mb-1">
+                    Avatar
+                </label>
+
+                <input type="file"
+                       name="avatar"
+                       class="w-full text-sm border border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
             </div>
         </div>
 
-        <!-- NAME -->
+        {{-- NAME --}}
         <div>
-            <label class="block text-sm font-medium">Name</label>
+            <label class="block text-sm font-medium text-black mb-1">
+                Name
+            </label>
 
             <input type="text"
                    name="name"
                    value="{{ old('name', auth()->user()->name) }}"
-                   class="w-full mt-1 border rounded-lg p-2 focus:ring focus:ring-red-300"
+                   class="w-full border border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                    required>
-
-            @error('name')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
         </div>
 
-        <!-- EMAIL -->
+        {{-- EMAIL --}}
         <div>
-            <label class="block text-sm font-medium">Email</label>
+            <label class="block text-sm font-medium text-black mb-1">
+                Email
+            </label>
 
             <input type="email"
                    name="email"
                    value="{{ old('email', auth()->user()->email) }}"
-                   class="w-full mt-1 border rounded-lg p-2 focus:ring focus:ring-red-300"
+                   class="w-full border border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                    required>
-
-            @error('email')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-
-            <!-- Verification -->
-            @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                <div class="mt-3 text-sm text-gray-600">
-
-                    <p>Your email is not verified.</p>
-
-                    <button form="send-verification"
-                            class="underline text-red-600 hover:text-red-800">
-                        Resend verification email
-                    </button>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="text-green-600 mt-1">
-                            Verification link sent!
-                        </p>
-                    @endif
-
-                </div>
-            @endif
         </div>
 
-        <!-- SAVE -->
-        <div class="flex items-center gap-4">
+        {{-- BUTTON --}}
+        <div class="flex items-center justify-between pt-4">
 
             <button type="submit"
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
-                Save
+                    class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition">
+                Save Changes
             </button>
 
-            @if (session('status') === 'profile-updated')
-                <span class="text-green-600 text-sm">
+            @if(session('success'))
+                <span class="text-green-600 text-sm font-medium">
                     ✔ Saved successfully
                 </span>
             @endif

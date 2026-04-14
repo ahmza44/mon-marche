@@ -75,7 +75,7 @@
                             ['label'=>'Panier',     'route'=>'customer.cart',      'icon'=>'shopping-cart'],
                         ] as $link)
                         <li>
-                            <a href="{{ route($link['route']) }}"
+                            <a href=""
                                class="group inline-flex items-center gap-2 text-sm text-gray-500
                                       hover:text-orange-500 transition-colors font-medium">
 

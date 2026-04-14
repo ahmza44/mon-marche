@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Customer extends Authenticatable
+class Customer extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
     use HasFactory;
@@ -20,7 +22,8 @@ class Customer extends Authenticatable
         'city',
         'google_id',
         'role', // user/admin
-        'avatar'=>'avatars/default.png',
+        'avatar',
+        'email_verified_at'
     ];
 
     protected $hidden = [
@@ -39,4 +42,5 @@ class Customer extends Authenticatable
     {
         return $this->role === 'admin';
     }
+     
 }

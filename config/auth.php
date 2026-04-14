@@ -1,35 +1,32 @@
 <?php
 
-use App\Models\Customer;
+
 
 return [
 
     'defaults' => [
-    'guard' => 'customer',
-    'passwords' => 'customers',
-],
-
-'guards' => [
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
+        'guard' => 'customer',
+        'passwords' => 'customers',
     ],
 
-    'customer' => [
-        'driver' => 'session',
-        'provider' => 'customers',
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'customer' => [
+            'driver' => 'session',
+            'provider' => 'customers',
+        ],
     ],
-],
 
-'providers' => [
-    'customers' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Customer::class,
+    'providers' => [
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Customer::class,
+        ],
     ],
-],
-
-
-
 
     'passwords' => [
         'customers' => [
